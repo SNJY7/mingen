@@ -14,3 +14,7 @@ The first line will be used as the title and heading.
 # Test
 
 Copy the mingen.py file to the folder named 'demo' and run the script.
+
+# Example site
+
+[SNJY7.github.io](https://github.com/snjy7/snjy7.github.io)
