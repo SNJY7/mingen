@@ -5,12 +5,6 @@ import os
 import sys
 import markdown
 
-cwd = os.getcwd()
-
-mdPath = cwd + "/md"
-htmlPath = cwd
-siteName = cwd[cwd.rindex("/")+1:]
-
 def index(folderPath):
     fileList = os.listdir(folderPath)
     index = ""
@@ -25,17 +19,17 @@ def index(folderPath):
     if index == "":
         return index
     else:
-        index = "<h2>Pages</h2><ul>" + index + "</ul>"
+        index = "<ul>" + index + "</ul>"
         return index
 
 def nav(filePath):
-    filePath = filePath[filePath.find("/md")+3:]
+    filePath = filePath.replace(cwd, "")
     nav = ""
     while filePath != "":
-        nav = nav + " > " + "<a href=\"" + filePath + "\">" + filePath[filePath.rindex("/")+1:] + " </a>"
+        nav = " / " + "<a href=\"" + filePath + "\">" + filePath[filePath.rindex("/")+1:] + "</a>" + nav
         filePath = filePath[:filePath.rindex("/")]
     nav = "<a href=\"/\">" + siteName + "</a>" + nav
-    nav = "<div class=nav>" + nav + "</div>"
+    nav = "<div class=navpath><p>" + nav + "</p></div>"
     return nav
 
 def md2html(mdFilePath, mdFileName):
@@ -44,30 +38,43 @@ def md2html(mdFilePath, mdFileName):
     mdFile = mdFile_.read()
     mdFile_.close()
     
-    htmlPath = mdFilePath.replace("/md", "", 1)
-    if os.path.isdir(htmlPath) != True:
-        os.mkdir(htmlPath)
-    htmlFile_ = open(htmlPath+"/"+mdFileName[:-3]+".html", "w+")
-    css = "<link rel=\"stylesheet\" href=\"/main.css\">"
+    htmlFile_ = open(mdFilePath+"/"+mdFileName[:-3]+".html", "w+")
     title = "<title>" + firstLine[2:-1] + "</title>"
-    head = "<head>" + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" + title + css + "</head>"
+    head_ = "<head>" + head + title + "</head>"
     if mdFileName == "index.md":
         index_ = index(mdFilePath)
     else:
         index_ = ""
-    body = "<body>" + "<header>" + markdown.markdown(firstLine) + "</header>" + "<nav>" + nav(mdFilePath) + "</nav>" + "<main>" + markdown.markdown(mdFile) + index_ + "</main>" + "</body>"
-    htmlFile = "<html>" + head + body + "</html>"
+    body = "<body>" + "<header>" + "<nav>" +  navLinks + nav(mdFilePath) + "</nav>" + "<hr>" + markdown.markdown(firstLine) + "</header>" + "<main>" + markdown.markdown(mdFile) + index_ + "</main>" + "<hr>" + footer + "</body>"
+    htmlFile = "<html>" + head_ + body + "</html>"
     htmlFile_.write(htmlFile)
     htmlFile_.close()
 
 def compile(filePath):
     fileList = os.listdir(filePath)
-    index(filePath)
     for fileName in fileList:
         if os.path.isdir(filePath+"/"+fileName):
-            index(filePath+"/"+fileName)
+            if fileName == "mingen":
+                continue
             compile(filePath+"/"+fileName)
         elif fileName[-3:] == ".md":
             md2html(filePath, fileName)
 
-compile(mdPath)
+cwd = os.getcwd()
+siteName = cwd[cwd.rindex("/")+1:]
+
+navLinks_ = open(cwd+"/mingen/nav.md", "r")
+navLinks = navLinks_.read()
+navLinks_.close()
+navLinks = "<div class=navlinks>" + markdown.markdown(navLinks) + "</div>"
+
+footer_ = open(cwd+"/mingen/footer.md", "r")
+footer = footer_.read()
+footer_.close()
+footer = "<footer>" + markdown.markdown(footer) + "</footer>"
+
+head_ = open(cwd+"/mingen/head.md", "r")
+head = head_.read()
+head_.close()
+
+compile(cwd)

@@ -5,15 +5,13 @@ Minimal Static Site Generator
 # How to use
 
 1. Copy mingen.py into your website's main folder.
-2. make a folder named 'md' and store all your markdown files here.
-3. Run mingen.py
+2. Make a folder 'mingen' and make:
+	- _nav.md_ file which will appear at the top of all pages
+	- _footer.md_ file which will appear at the bottom of all pages
+	- _head.md_ file which be added in the `<head></head>` of the html page
 
-All markdown files and subfolders inside the folder 'md' will be recursively generated in your website folder.
+All markdown files will be converted to html files.
 The first line will be used as the title and heading.
-
-# Test
-
-Copy the mingen.py file to the folder named 'demo' and run the script.
 
 # Example site
 
