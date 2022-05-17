@@ -13,6 +13,8 @@ Minimal Static Site Generator
 All markdown files will be converted to html files.
 The first line will be used as the title and heading.
 
+Name your files starting with the date of creation in the format YYYY-MM-DD-title-of-the-post.md (ex. 2022-05-15-test-post.md) to sort by creation date.
+
 # Example site
 
 [SNJY7.github.io](https://github.com/snjy7/snjy7.github.io)
