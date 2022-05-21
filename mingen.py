@@ -5,6 +5,10 @@ import os
 import sys
 import markdown
 
+def enclose(tag, content, attributes=""):
+    result = "<" + tag + " " + attributes + ">" + content + "</" + tag + ">" 
+    return result
+
 def index(folderPath):
     fileList = os.listdir(folderPath)
     index = ""
@@ -15,11 +19,11 @@ def index(folderPath):
             file_ = open(folderPath+"/"+fileName, "r")
             title = file_.readline()
             file_.close()
-            index = index + "<li><a href=\"" + fileName[:-3] + ".html\">" + title[2:] + "</a></li>"
+            index = index + enclose("li", "<a href=\"" + fileName[:-3] + ".html\">" + title[2:] + "</a>")
     if index == "":
         return index
     else:
-        index = "<ul>" + index + "</ul>"
+        index =  enclose("ul", index)
         return index
 
 def nav(filePath):
@@ -39,14 +43,14 @@ def md2html(mdFilePath, mdFileName):
     mdFile_.close()
     
     htmlFile_ = open(mdFilePath+"/"+mdFileName[:-3]+".html", "w+")
-    title = "<title>" + firstLine[2:-1] + "</title>"
-    head_ = "<head>" + head + title + "</head>"
+    title = enclose("title", firstLine[2:-1])
     if mdFileName == "index.md":
         index_ = index(mdFilePath)
     else:
         index_ = ""
-    body = "<body>" + "<header>" + "<nav>" +  navLinks + nav(mdFilePath) + "</nav>" + "<hr>" + markdown.markdown(firstLine) + "</header>" + "<main>" + markdown.markdown(mdFile) + index_ + "</main>" + "<hr>" + footer + "</body>"
-    htmlFile = "<html>" + head_ + body + "</html>"
+    body = enclose("body", enclose("header", enclose("nav", navLinks + nav(mdFilePath)) + "<hr>" + markdown.markdown(firstLine))  
+         + enclose("main", markdown.markdown(mdFile) + index_) + "<hr>" + footer)
+    htmlFile = enclose("html", enclose("head", head + title) + body)
     htmlFile_.write(htmlFile)
     htmlFile_.close()
 
@@ -63,18 +67,28 @@ def compile(filePath):
 cwd = os.getcwd()
 siteName = cwd[cwd.rindex("/")+1:]
 
-navLinks_ = open(cwd+"/mingen/nav.md", "r")
-navLinks = navLinks_.read()
-navLinks_.close()
-navLinks = "<div class=navlinks>" + markdown.markdown(navLinks) + "</div>"
 
-footer_ = open(cwd+"/mingen/footer.md", "r")
-footer = footer_.read()
-footer_.close()
-footer = "<footer>" + markdown.markdown(footer) + "</footer>"
+try:
+    navLinks_ = open(cwd+"/mingen/nav.md", "r")
+    navLinks = navLinks_.read()
+    navLinks_.close()
+    navLinks = "<div class=navlinks>" + markdown.markdown(navLinks) + "</div>"
+except:
+    navLinks = ""
 
-head_ = open(cwd+"/mingen/head.md", "r")
-head = head_.read()
-head_.close()
+try:
+    footer_ = open(cwd+"/mingen/footer.md", "r")
+    footer = footer_.read()
+    footer_.close()
+    footer = "<footer>" + markdown.markdown(footer) + "</footer>"
+except:
+    footer = ""
 
+try:
+    head_ = open(cwd+"/mingen/head.html", "r")
+    head = head_.read()
+    head_.close()
+except:
+    head = ""
+    
 compile(cwd)
