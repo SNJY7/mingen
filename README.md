@@ -17,4 +17,4 @@ Name your files starting with the date of creation in the format YYYY-MM-DD-titl
 
 # Example site
 
-[SNJY7.github.io](https://github.com/snjy7/snjy7.github.io)
+[snjy7.github.io](https://github.com/snjy7/snjy7.github.io)
