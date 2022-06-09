@@ -67,9 +67,8 @@ def compile(filePath):
 cwd = os.getcwd()
 siteName = cwd[cwd.rindex("/")+1:]
 
-
 try:
-    navLinks_ = open(cwd+"/mingen/nav.md", "r")
+    navLinks_ = open(cwd+"/items/nav.md", "r")
     navLinks = navLinks_.read()
     navLinks_.close()
     navLinks = "<div class=navlinks>" + markdown.markdown(navLinks) + "</div>"
@@ -77,7 +76,7 @@ except:
     navLinks = ""
 
 try:
-    footer_ = open(cwd+"/mingen/footer.md", "r")
+    footer_ = open(cwd+"/items/footer.md", "r")
     footer = footer_.read()
     footer_.close()
     footer = "<footer>" + markdown.markdown(footer) + "</footer>"
@@ -85,7 +84,7 @@ except:
     footer = ""
 
 try:
-    head_ = open(cwd+"/mingen/head.html", "r")
+    head_ = open(cwd+"/items/head.html", "r")
     head = head_.read()
     head_.close()
 except:
