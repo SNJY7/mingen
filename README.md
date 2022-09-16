@@ -6,8 +6,8 @@ Static Site Generator
 
 1. Copy mingen.py into your website's main folder.
 2. Make a folder 'items' and make:
-- _nav.md_ file which will appear at the top of all pages
-- _footer.md_ file which will appear at the bottom of all pages
+- _nav.md_ file which will be added at the top of all pages
+- _footer.md_ file which will be added at the bottom of all pages
 - _head.html_ file which be added in the `<head></head>` of the html page
 
 All markdown files will be converted to html files.
